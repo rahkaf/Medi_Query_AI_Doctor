@@ -18,7 +18,6 @@ MediQuery is an advanced medical information retrieval system that leverages Ret
 
 ## 🏗️ Architecture
 
-![MediQuery Architecture](docs/architecture.png)
 
 - **Frontend**: Streamlit-based interactive web interface
 - **Backend**: FastAPI server with async support
