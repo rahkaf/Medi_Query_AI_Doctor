@@ -126,7 +126,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 👥 Authors
 
-- Your Name - [GitHub Profile](https://github.com/yourusername)
+- Your Name - [GitHub Profile](https://github.com/rahkaf)
 
 ## 🙏 Acknowledgments
 
