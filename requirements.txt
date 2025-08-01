@@ -1,14 +1,13 @@
 # mediquery/requirements.txt
-streamlit==1.38.0
-fastapi==0.115.0
-uvicorn==0.30.6
-torch==2.4.1
-transformers==4.44.2
-faiss-cpu==1.8.0
-PyPDF2==3.0.1
-pandas==2.2.2
-numpy==1.26.4
-python-multipart==0.0.9
-reportlab==4.2.2
-python-dotenv==1.0.0
-torch==2.5.1
+streamlit
+fastapi
+uvicorn
+torch
+transformers
+faiss-cpu
+PyPDF2
+pandas
+numpy
+python-multipart
+reportlab
+python-dotenv
