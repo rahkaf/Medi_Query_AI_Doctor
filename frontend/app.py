@@ -38,7 +38,7 @@ if page == "Main":
             with st.spinner("Processing query..."):
                 try:
                     response = requests.post(
-                        "http://localhost:8000/query/",  # Use 8001 if changed
+                        "http://0.0.0.0:7860/query/",  # Use 8001 if changed
                         headers={"Content-Type": "application/json"},
                         json={"query": query, "mode": mode}
                     )
