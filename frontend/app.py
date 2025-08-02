@@ -3,7 +3,10 @@ import streamlit as st
 import requests
 import json
 
-# Initialize session state for history and quiz
+# BACKEND URL - SET THIS TO YOUR HUGGING FACE SPACE URL
+BACKEND_URL = "https://xargham-medi-query.hf.space"
+
+# Initialize session state
 if "history" not in st.session_state:
     st.session_state.history = []
 if "quiz_questions" not in st.session_state:
@@ -22,14 +25,13 @@ if page != st.session_state.current_page:
 
 # History sidebar
 st.sidebar.title("History")
-for hist_page in st.session_state.history[-5:]:  # Show last 5 pages
+for hist_page in st.session_state.history[-5:]:
     st.sidebar.write(hist_page)
 
 if page == "Main":
     st.title("MediQuery: Medical Information Retrieval")
     st.write("Ask questions about HIV/AIDS based on processed documents.")
 
-    # Query section
     st.subheader("Ask a Question")
     query = st.text_input("Enter your question (e.g., 'Please write your question! :) ')")
     mode = st.selectbox("Select mode", ["quick", "research"])
@@ -38,7 +40,7 @@ if page == "Main":
             with st.spinner("Processing query..."):
                 try:
                     response = requests.post(
-                        "http://0.0.0.0:7860/query/",  # Use 8001 if changed
+                        f"{BACKEND_URL}/query/",
                         headers={"Content-Type": "application/json"},
                         json={"query": query, "mode": mode}
                     )
@@ -55,7 +57,6 @@ elif page == "Quiz Generation":
     st.title("MediQuery: Quiz Generation")
     st.write("Generate a quiz on HIV/AIDS to test your knowledge.")
 
-    # Quiz generation form
     st.subheader("Generate Quiz")
     with st.form(key="quiz_form"):
         query = st.text_input("Enter a topic for the quiz (e.g., 'HIV transmission')")
@@ -66,7 +67,7 @@ elif page == "Quiz Generation":
         with st.spinner("Generating quiz..."):
             try:
                 response = requests.post(
-                    "http://localhost:8000/query/",  # Use 8001 if changed
+                    f"{BACKEND_URL}/query/",
                     headers={"Content-Type": "application/json"},
                     json={"query": query, "mode": "quiz", "num_questions": num_questions}
                 )
@@ -91,32 +92,23 @@ elif page == "Quiz Answering":
         st.subheader("Quiz")
         correct_answers = 0
         total_questions = len(st.session_state.quiz_questions)
-        
-        # Create columns for better layout
+
         col1, col2 = st.columns([3, 1])
-        
         with col1:
             for i, question in enumerate(st.session_state.quiz_questions):
                 st.markdown(f"**Question {i+1}:** {question['question']}")
-                
-                # Create radio buttons for options
                 answer = st.radio(
                     "Select your answer:",
                     options=question['options'],
                     key=f"q_{i}",
-                    index=None  # No default selection
+                    index=None
                 )
-                
-                # Store the answer in session state
                 if f"answer_{i}" not in st.session_state:
                     st.session_state[f"answer_{i}"] = None
-                
                 if answer:
                     st.session_state[f"answer_{i}"] = answer
-                
-                st.markdown("---")  # Add separator between questions
-        
-        # Submit button
+                st.markdown("---")
+
         if st.button("Submit Quiz"):
             score = 0
             for i, question in enumerate(st.session_state.quiz_questions):
@@ -124,13 +116,11 @@ elif page == "Quiz Answering":
                     selected_answer = question['options'].index(st.session_state[f"answer_{i}"])
                     if selected_answer == question['correct_answer']:
                         score += 1
-            
-            # Display results
+
             st.success(f"Quiz completed! Your score: {score}/{total_questions}")
-            percentage = (score/total_questions) * 100
-            st.progress(percentage/100)  # Show progress bar
-            
-            # Add a retry button
+            percentage = (score / total_questions) * 100
+            st.progress(percentage / 100)
+
             if st.button("Try Another Quiz"):
                 st.session_state.quiz_questions = None
                 st.session_state.quiz_answers = None
