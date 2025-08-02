@@ -1,1 +1,22 @@
-data/pdfs/*.pdf
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Data files
+data/index/
+data/metadata.json
+data/pdfs/        # Add this line to exclude PDF directory
+*.pdf             # Add this line to exclude all PDF files
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.log
