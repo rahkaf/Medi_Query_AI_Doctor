@@ -15,4 +15,4 @@ jobs:
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://rahkaf:$HF_TOKEN@huggingface.co/spaces/xargham/Medi_Query/ main
+        run: git push --force https://rahkaf:$HF_TOKEN@huggingface.co/spaces/xargham/Medi_Query/ main
