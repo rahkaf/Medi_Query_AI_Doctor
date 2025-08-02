@@ -16,4 +16,4 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.hugging_face_token }}
-        run: git push https://xargham:$hugging_face_token@huggingface.co/spaces/FULL_SPACE_NAME main
+        run: git push https://xargham:$hugging_face_token@huggingface.co/spaces/xargham/Medi_Query main
