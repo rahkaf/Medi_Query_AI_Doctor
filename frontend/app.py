@@ -1,9 +1,7 @@
-# mediquery/frontend/app.py
 import streamlit as st
 import requests
-import json
 
-# BACKEND URL - SET THIS TO YOUR HUGGING FACE SPACE URL
+# BACKEND URL for Hugging Face Space (FastAPI runs at /api)
 BACKEND_URL = "https://xargham-medi-query.hf.space"
 
 # Initialize session state
@@ -46,8 +44,11 @@ if page == "Main":
                     )
                     response.raise_for_status()
                     result = response.json()
-                    st.subheader("Answer")
-                    st.write(result["answer"])
+                    if "error" in result:
+                        st.error(result["error"])
+                    else:
+                        st.subheader("Answer")
+                        st.write(result["answer"])
                 except requests.exceptions.RequestException as e:
                     st.error(f"Error connecting to backend: {str(e)}")
         else:
@@ -73,7 +74,9 @@ elif page == "Quiz Generation":
                 )
                 response.raise_for_status()
                 result = response.json()
-                if isinstance(result["answer"], dict) and "questions" in result["answer"]:
+                if "error" in result:
+                    st.error(result["error"])
+                elif isinstance(result["answer"], dict) and "questions" in result["answer"]:
                     st.session_state.quiz_questions = result["answer"]["questions"]
                     st.session_state.quiz_answers = [None] * len(result["answer"]["questions"])
                     st.success("Quiz generated! Navigate to 'Quiz Answering' to take the quiz.")
@@ -90,9 +93,7 @@ elif page == "Quiz Answering":
         st.warning("No quiz generated. Please go to 'Quiz Generation' to create a quiz.")
     else:
         st.subheader("Quiz")
-        correct_answers = 0
         total_questions = len(st.session_state.quiz_questions)
-
         col1, col2 = st.columns([3, 1])
         with col1:
             for i, question in enumerate(st.session_state.quiz_questions):
